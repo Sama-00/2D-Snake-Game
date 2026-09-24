@@ -1,0 +1,62 @@
+<!--Step 1: General Project Layout. -->
+
+<!DOCTYPE html> <!-- Tell the browser this is a modern HTML document. -->
+<html lang="en"> <!-- Begin the page and identify its language as English. -->
+
+<!--Step 2 front page Layout. -->
+
+<head> <!-- Begin information and styling for the page. -->
+  <meta charset="UTF-8"> <!-- Allow the browser to display normal text and symbols. -->
+  <title>My test game</title> <!-- Set the name shown on the browser tab. -->
+  <style> /* Begin CSS: the instructions for how the page looks. */
+    body { /* Apply these appearance settings to the visible page. */
+      background-color: #e4edcc; /* Give the page a pale green background. */
+      color: #263b20; /* Use dark green text for easy reading. */
+      font-family: Arial, sans-serif; /* Choose a simple, readable font. */
+      max-width: 600px; /* Keep the text area from becoming too wide. */
+      margin: 40px auto; /* Leave space above the page and centre it horizontally. */
+      padding: 20px; /* Add space between the content and its edges. */
+      line-height: 1.6; /* Increase the space between lines of text. */
+    } /* Finish the appearance settings for the page. */
+  </style> <!-- Finish the CSS section. -->
+</head> <!-- Finish the information and styling section. -->
+<body> <!-- Begin the content that the player will see. -->
+  <h1>2D Snake Game</h1> <!-- Display the main heading. -->
+  <p>Eat apples, grow your snake, and beat your high score!</p> <!-- Explain the goal. -->
+  <h2>Rules and controls</h2> <!-- Display a smaller heading above the rules. -->
+  <ul> <!-- Begin a list of rules with bullet points. -->
+    <li>Use the arrow keys to steer the snake.</li> <!-- Explain movement controls. -->
+    <li>Each apple adds 1 point and grows your snake by 1 segment.</li> <!-- Explain apples. -->
+    <li>You start with 3 lives.</li> <!-- Explain the starting number of lives. -->
+    <li>Hit a wall: lose 1 life and freeze in place.</li> <!-- Explain the wall hazard. -->
+    <li>If you have lives left, turn 90 degrees away to move again.</li> <!-- Explain escape. -->
+    <li>After a wall hit, you flicker with 3 seconds of protection from further wall damage.</li> <!-- Explain protection. -->
+    <li>Touch your own body: the game ends immediately.</li> <!-- Explain body collision. -->
+    <li>Lose all your lives: the game ends.</li> <!-- Explain the other way to lose. -->
+  </ul> <!-- Finish the list of rules. -->
+  <button disabled>Start Game</button> <!-- Show a disabled button until gameplay is ready. -->
+  <p>Start will become available as we build the game.</p> <!-- Explain why the button is disabled. -->
+
+<!-- Step 3: Game board. -->
+
+<h2>Game board</h2> <!-- Add a heading above our drawing area. -->
+<canvas id="board" width="400" height="400" style="background: white; border: 2px solid #263b20;"></canvas> <!-- Create a white drawing area measuring 400 by 400 pixels. -->
+
+<script> // Begin JavaScript: instructions that the browser will run.
+  const board = document.getElementById("board"); // Find the canvas using its id, "board".
+  const pen = board.getContext("2d"); // Get the drawing tools for flat, two-dimensional shapes.
+  const cellSize = 20; // Make each grid square 20 pixels wide and 20 pixels tall.
+
+  pen.strokeStyle = "#cbd5b5"; // Choose a pale green colour for the grid lines.
+
+  for (let position = cellSize; position < board.width; position = position + cellSize) { // Draw lines at 20, 40, 60 pixels, and so on, stopping before 400.
+    pen.beginPath(); // Begin a fresh set of lines.
+    pen.moveTo(position, 0); // Place the pen at the top of a vertical grid line.
+    pen.lineTo(position, board.height); // Plan a straight line down to the bottom.
+    pen.moveTo(0, position); // Lift the pen and place it at the left of a horizontal grid line.
+    pen.lineTo(board.width, position); // Plan a straight line across to the right.
+    pen.stroke(); // Draw both planned lines onto the canvas.
+  } // Finish the repeating instructions.
+</script> <!-- Finish the JavaScript section. -->
+</body> <!-- Finish the visible page content. -->
+</html> <!-- Finish the HTML document. -->
