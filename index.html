@@ -1,62 +1,73 @@
-<!--Step 1: General Project Layout. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2D Snake Game</title>
+  <style>
+    /* Keep the pale green appearance from my first version. */
+    body {
+      background-color: #e4edcc;
+      color: #263b20;
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 { margin: 0; }
+    .intro { margin: 3px 0 16px; }
+    .game-area { max-width: 404px; }
+    .scoreboard { display: flex; justify-content: space-between; gap: 8px; font-weight: bold; margin-bottom: 8px; }
+    #lives { color: #ae2c36; letter-spacing: 2px; }
+    canvas { display: block; width: 100%; box-sizing: border-box; background: white; border: 2px solid #263b20; }
+    canvas:focus-visible { outline: 3px solid #739350; outline-offset: 3px; }
+    #message { min-height: 3.2em; margin: 10px 0; }
+    .buttons { display: flex; gap: 10px; }
+    button { font: inherit; font-weight: bold; border: 2px solid #263b20; border-radius: 5px; padding: 7px 18px; cursor: pointer; background: #263b20; color: white; }
+    button:disabled { opacity: 0.45; cursor: default; }
+    button:focus-visible { outline: 3px solid #739350; outline-offset: 3px; }
+    #pause { background: transparent; color: #263b20; }
+    h2 { font-size: 1.1rem; margin-bottom: 6px; }
+    ul { margin-top: 0; padding-left: 24px; }
+    .note { font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>2D Snake Game</h1>
+  <p class="intro">Eat apples, grow your snake, and beat your high score!</p>
 
-<!DOCTYPE html> <!-- Tell the browser this is a modern HTML document. -->
-<html lang="en"> <!-- Begin the page and identify its language as English. -->
+  <main class="game-area">
+    <!-- Player information stays above the board, as in the design. -->
+    <div class="scoreboard">
+      <span>Score: <span id="score">0</span></span>
+      <span>Best: <span id="best">0</span></span>
+      <span id="lives" aria-label="3 of 3 hearts remaining">♥♥♥</span>
+    </div>
+    <canvas id="board" width="400" height="400" tabindex="0" aria-label="Snake game board. Use the arrow keys to steer.">
+      Your browser must support canvas to play this game.
+    </canvas>
+    <p id="message" role="status">Press Start Game, then use the arrow keys.</p>
+    <div class="buttons">
+      <button id="start" type="button">Start Game</button>
+      <button id="pause" type="button" disabled>Pause</button>
+    </div>
+  </main>
 
-<!--Step 2 front page Layout. -->
-
-<head> <!-- Begin information and styling for the page. -->
-  <meta charset="UTF-8"> <!-- Allow the browser to display normal text and symbols. -->
-  <title>My test game</title> <!-- Set the name shown on the browser tab. -->
-  <style> /* Begin CSS: the instructions for how the page looks. */
-    body { /* Apply these appearance settings to the visible page. */
-      background-color: #e4edcc; /* Give the page a pale green background. */
-      color: #263b20; /* Use dark green text for easy reading. */
-      font-family: Arial, sans-serif; /* Choose a simple, readable font. */
-      max-width: 600px; /* Keep the text area from becoming too wide. */
-      margin: 40px auto; /* Leave space above the page and centre it horizontally. */
-      padding: 20px; /* Add space between the content and its edges. */
-      line-height: 1.6; /* Increase the space between lines of text. */
-    } /* Finish the appearance settings for the page. */
-  </style> <!-- Finish the CSS section. -->
-</head> <!-- Finish the information and styling section. -->
-<body> <!-- Begin the content that the player will see. -->
-  <h1>2D Snake Game</h1> <!-- Display the main heading. -->
-  <p>Eat apples, grow your snake, and beat your high score!</p> <!-- Explain the goal. -->
-  <h2>Rules and controls</h2> <!-- Display a smaller heading above the rules. -->
-  <ul> <!-- Begin a list of rules with bullet points. -->
-    <li>Use the arrow keys to steer the snake.</li> <!-- Explain movement controls. -->
-    <li>Each apple adds 1 point and grows your snake by 1 segment.</li> <!-- Explain apples. -->
-    <li>You start with 3 lives.</li> <!-- Explain the starting number of lives. -->
-    <li>Hit a wall: lose 1 life and freeze in place.</li> <!-- Explain the wall hazard. -->
-    <li>If you have lives left, turn 90 degrees away to move again.</li> <!-- Explain escape. -->
-    <li>After a wall hit, you flicker with 3 seconds of protection from further wall damage.</li> <!-- Explain protection. -->
-    <li>Touch your own body: the game ends immediately.</li> <!-- Explain body collision. -->
-    <li>Lose all your lives: the game ends.</li> <!-- Explain the other way to lose. -->
-  </ul> <!-- Finish the list of rules. -->
-  <button disabled>Start Game</button> <!-- Show a disabled button until gameplay is ready. -->
-  <p>Start will become available as we build the game.</p> <!-- Explain why the button is disabled. -->
-
-<!-- Step 3: Game board. -->
-
-<h2>Game board</h2> <!-- Add a heading above our drawing area. -->
-<canvas id="board" width="400" height="400" style="background: white; border: 2px solid #263b20;"></canvas> <!-- Create a white drawing area measuring 400 by 400 pixels. -->
-
-<script> // Begin JavaScript: instructions that the browser will run.
-  const board = document.getElementById("board"); // Find the canvas using its id, "board".
-  const pen = board.getContext("2d"); // Get the drawing tools for flat, two-dimensional shapes.
-  const cellSize = 20; // Make each grid square 20 pixels wide and 20 pixels tall.
-
-  pen.strokeStyle = "#cbd5b5"; // Choose a pale green colour for the grid lines.
-
-  for (let position = cellSize; position < board.width; position = position + cellSize) { // Draw lines at 20, 40, 60 pixels, and so on, stopping before 400.
-    pen.beginPath(); // Begin a fresh set of lines.
-    pen.moveTo(position, 0); // Place the pen at the top of a vertical grid line.
-    pen.lineTo(position, board.height); // Plan a straight line down to the bottom.
-    pen.moveTo(0, position); // Lift the pen and place it at the left of a horizontal grid line.
-    pen.lineTo(board.width, position); // Plan a straight line across to the right.
-    pen.stroke(); // Draw both planned lines onto the canvas.
-  } // Finish the repeating instructions.
-</script> <!-- Finish the JavaScript section. -->
-</body> <!-- Finish the visible page content. -->
-</html> <!-- Finish the HTML document. -->
+  <h2>Rules and controls</h2>
+  <ul>
+    <li>Use the arrow keys to steer. You cannot reverse straight into your body.</li>
+    <li>Each apple adds 1 point and grows your snake by 1 segment.</li>
+    <li>You start with 3 hearts. Hit a wall: lose 1 heart and freeze in place.</li>
+    <li>Turn 90 degrees toward an open square to move again.</li>
+    <li>After losing a heart, you flicker with 3 seconds of protection from more wall damage.</li>
+    <li>Touch your own body or lose all hearts: Game Over.</li>
+    <li>Press Space or Pause to pause. Use Restart Game after Game Over.</li>
+  </ul>
+  <p class="note">The best score is saved in this browser when local storage is available.</p>
+  <noscript>Enable JavaScript in your browser to play.</noscript>
+  <!-- Load the rules before connecting them to the page. No installation is needed. -->
+  <script src="game.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
